@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="audio.js"></script> <!-- Load audio.js early to start music -->
+    <style>
+        .sparkling { animation: sparkle 1s infinite; }
+        @keyframes sparkle { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        
+        .floating { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        
+        .heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        
+        .teddy-rain { position: absolute; top: -50px; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(100vh); } }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg overflow-hidden">
+    <div class="relative container mx-auto px-4 py-8 text-center">
+        <!-- Welcome Message -->
+        <div class="glass-effect p-8 mb-8 floating">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 kawaii-shadow" style="background: linear-gradient(45deg, #d71818, #c64558); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                ✨Hey Cutiee Wishing you a sweetest B'day! ✨
+            </h1>
+            <p class="text-xl md:text-2xl text-pink-500 kawaii-shadow">
+                Only for youuuu! 🐻💗
+            </p>
+        </div>
+
+        <!-- Main Teddy -->
+        <div id="mainTeddy" class="w-64 h-64 mx-auto mb-8 cursor-pointer floating kawaii-shadow">
+            <svg viewBox="0 0 200 200" class="w-full h-full">
+                <!-- Teddy Body -->
+                <circle cx="100" cy="100" r="80" fill="#FFC0CB"/>
+                <circle cx="100" cy="110" r="60" fill="#FFD1DC"/>
+                <!-- Eyes -->
+                <circle cx="75" cy="80" r="8" fill="#4A4A4A"/>
+                <circle cx="125" cy="80" r="8" fill="#4A4A4A"/>
+                <!-- Nose -->
+                <circle cx="100" cy="95" r="10" fill="#FF9AAC"/>
+                <!-- Mouth -->
+                <path d="M 85 110 Q 100 120 115 110" stroke="#4A4A4A" fill="none" stroke-width="3"/>
+            </svg>
+        </div>
+
+        <!-- Next Button -->
+        <button id="nextButton" class="glass-effect text-pink-500 font-bold py-4 px-10 rounded-full text-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:text-pink-600 heartbeat">
+            🌈 Next Adventure! 🌈
+        </button>
+
+        <!-- Hidden Surprise Message -->
+        <div id="surprise" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 glass-effect p-8 hidden kawaii-shadow">
+            <p class="text-3xl font-bold mb-4 text-pink-500">✨ Surprise Pookie! ✨</p>
+            <p class="text-xl text-pink-500">Here's a special hug from your well-wisher! 🤗💖</p>
+        </div>
+    </div>
+     <!-- Small Play Button -->
+<button id="playMusic" class="fixed bottom-4 right-4 bg-pink-500 text-white px-4 py-2 rounded-full shadow-lg text-sm">
+    🎵 Play Music
+</button>
+
+
+    <script>
+        // Create falling teddies with hearts
+        function createTeddyRain() {
+            const elements = ['🧸', '💗', '✨', '🎀'];
+            if (document.querySelectorAll('.teddy-rain').length > 20) return; // Limit elements
+            const teddy = document.createElement('div');
+            teddy.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+            teddy.className = 'teddy-rain text-2xl';
+            teddy.style.left = Math.random() * 100 + 'vw';
+            teddy.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(teddy);
+            setTimeout(() => teddy.remove(), 5000);
+        }
+
+        setInterval(createTeddyRain, 400);
+
+        // Main Teddy Interaction
+        document.getElementById('mainTeddy').addEventListener('click', () => {
+            const teddy = document.getElementById('mainTeddy');
+            teddy.classList.add('scale-125');
+            setTimeout(() => teddy.classList.remove('scale-125'), 200);
+        });
+
+        // Surprise message after some interaction
+        setTimeout(() => {
+            const surprise = document.getElementById('surprise');
+            surprise.classList.remove('hidden');
+            gsap.from(surprise, { scale: 0, rotation: 360, duration: 1, ease: "elastic.out(1, 0.5)" });
+            setTimeout(() => gsap.to(surprise, { scale: 0, opacity: 0, duration: 1, onComplete: () => surprise.classList.add('hidden') }), 3000);
+        }, 5000);
+
+        // Next button interaction
+        document.getElementById('nextButton').addEventListener('click', () => {
+            gsap.to('body', { opacity: 0, duration: 1, onComplete: () => window.location.href = 'Teddy.html' });
+        });
+    </script>
+</body>
+</html>
