@@ -1,51 +1,25 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let audio = document.getElementById("bgMusic");
-    let playButton = document.getElementById("playMusic");
+    const bgMusic = document.getElementById("bgMusic");
+    const playButton = document.getElementById("playMusic");
 
-    if (!audio) {
-        // Create audio element dynamically if not found
-        audio = document.createElement("audio");
-        audio.id = "bgMusic";
-        audio.loop = true;
-        audio.innerHTML = `<source src="Hasi.mp3" type="audio/mpeg">`;
-        document.body.appendChild(audio);
-    }
-
-    // Restore playback time & state
-    let savedTime = localStorage.getItem("musicTime");
-    let isPlaying = localStorage.getItem("isMusicPlaying");
-
-    if (savedTime) {
-        audio.currentTime = parseFloat(savedTime); // Restore previous position
-    }
-
-    if (isPlaying === "true") {
-        audio.play();
+    // Check if music is already playing in another tab and continue if needed
+    if (!bgMusic.paused) {
         playButton.innerText = "⏸ Pause Music";
     }
 
-    // Play/Pause Button Functionality
     playButton.addEventListener("click", function () {
-        if (audio.paused) {
-            audio.play();
-            localStorage.setItem("isMusicPlaying", "true");
+        if (bgMusic.paused) {
+            // Stop any other existing audio before playing new one
+            document.querySelectorAll("audio").forEach((audio) => {
+                audio.pause();
+                audio.currentTime = 0; // Reset audio to start
+            });
+
+            bgMusic.play();
             playButton.innerText = "⏸ Pause Music";
         } else {
-            audio.pause();
-            localStorage.setItem("isMusicPlaying", "false");
+            bgMusic.pause();
             playButton.innerText = "🎵 Play Music";
         }
-    });
-
-    // Continuously save playback time to localStorage
-    setInterval(() => {
-        if (!audio.paused) {
-            localStorage.setItem("musicTime", audio.currentTime);
-        }
-    }, 1000); // Save progress every second
-
-    // Prevent resetting the song on page reload
-    window.addEventListener("beforeunload", function () {
-        localStorage.setItem("musicTime", audio.currentTime);
     });
 });
