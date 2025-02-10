@@ -23,6 +23,10 @@
     </style>
 </head>
 <body class="min-h-screen gradient-bg overflow-hidden">
+
+    <!-- Hidden Audio Iframe (Persists Music Across Pages) -->
+    <iframe src="audio.html" id="audioFrame" style="display: none;"></iframe>
+
     <div class="relative container mx-auto px-4 py-8 text-center">
         <!-- Welcome Message -->
         <div class="glass-effect p-8 mb-8 floating">
@@ -61,15 +65,11 @@
             <p class="text-xl text-pink-500">Here's a special hug from your well-wisher! 🤗💖</p>
         </div>
     </div>
-    
-    <audio id="bgMusic" loop>
-    <source src="Hasi.mp3" type="audio/mpeg">
-</audio>
-     <!-- Small Play Button -->
-<button id="playMusic" class="fixed bottom-4 right-4 bg-pink-500 text-white px-4 py-2 rounded-full shadow-lg text-sm">
-    🎵 Play Music
-</button>
 
+    <!-- Small Play Button -->
+    <button id="playMusic" class="fixed bottom-4 right-4 bg-pink-500 text-white px-4 py-2 rounded-full shadow-lg text-sm">
+        🎵 Play Music
+    </button>
 
     <script>
         // Create falling teddies with hearts
@@ -105,6 +105,30 @@
         // Next button interaction
         document.getElementById('nextButton').addEventListener('click', () => {
             gsap.to('body', { opacity: 0, duration: 1, onComplete: () => window.location.href = 'Teddy.html' });
+        });
+
+        // Persistent Music Handling
+        let playButton = document.getElementById("playMusic");
+        let audioFrame = document.getElementById("audioFrame").contentWindow;
+
+        // Check stored play state
+        let isPlaying = sessionStorage.getItem("isMusicPlaying");
+
+        if (isPlaying === "true") {
+            playButton.innerText = "⏸ Pause Music";
+        }
+
+        // Button Click Event
+        playButton.addEventListener("click", function () {
+            if (sessionStorage.getItem("isMusicPlaying") === "true") {
+                audioFrame.postMessage("pause", "*");
+                sessionStorage.setItem("isMusicPlaying", "false");
+                playButton.innerText = "🎵 Play Music";
+            } else {
+                audioFrame.postMessage("play", "*");
+                sessionStorage.setItem("isMusicPlaying", "true");
+                playButton.innerText = "⏸ Pause Music";
+            }
         });
     </script>
 </body>
