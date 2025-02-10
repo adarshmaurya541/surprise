@@ -3,19 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Background Music</title>
+    <title>Audio Player</title>
 </head>
 <body>
-    <audio id="backgroundMusic" loop>
+    <audio id="bgMusic" loop>
         <source src="Hasi.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
+        Your browser does not support the audio tag.
     </audio>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const audio = document.getElementById("backgroundMusic");
-            audio.volume = 0.5; // Adjust volume
+        let audio = document.getElementById("bgMusic");
 
-            // Try to play audio
-            audio.play().then(() => {
-                console.log("Music started suc
+        // Restore playback time & play state from sessionStorage
+        let savedTime = sessionStorage.getItem("musicTime");
+        let isPlaying = sessionStorage.getItem("isMusicPlaying");
+
+        if (savedTime) {
+            audio.currentTime = parseFloat(savedTime);
+        }
+
+        if (isPlaying === "true") {
+            audio.play();
+        }
+
+        // Save playback position every second
+        setInterval(() => {
+            sessionStorage.setItem("musicTime", audio.currentTime);
+        }, 1000);
+
+        // Listen for messages from parent pages
+        window.addEventListener("message", (event) => {
+            if (event.data === "play") {
+                audio.play();
+                sessionStorage.setItem("isMusicPlaying", "true");
+            } else if (event.data === "pause") {
+                audio.pause();
+                sessionStorage.setItem("isMusicPlaying", "false");
+            }
+        });
+    </script>
+</body>
+</html>
