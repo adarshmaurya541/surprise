@@ -200,7 +200,7 @@
 
         </div>
     </div>
-<script src="audio.js" defer></script>
+
 
     <script>
         function createHeart() {
@@ -232,4 +232,12 @@
         }
 
         document.querySelector('.teddy').addEventListener('click', (e) => {
-            const 
+            const rect = e.target.getBoundingClientRect();
+            createFlyingKiss(rect.left + rect.width/2, rect.top + rect.height/2);
+        });
+
+        setInterval(createHeart, 1000);
+    </script>
+    <script src="audio.js" defer></script>
+</body>
+</html>
