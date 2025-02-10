@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Notes</title>
+    <title>Pookie Love Notes</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -96,7 +96,7 @@
                     <img src="/api/placeholder/300/300" alt="Pookie Bear GIF" id="gifDisplay">
                 </div>
                 <div id="wishContainer" class="glass-effect p-6 text-center ml-6">
-                    <p id="wishText" class="text-2xl md:text-3xl text-pink-600 font-semibold">Happiest B'day Riya🌸💖🤗</p>
+                    <p id="wishText" class="text-2xl md:text-3xl text-pink-600 font-semibold">Kahoo Naa Pyaarr hyy 🤭💗</p>
                 </div>
             </div>
 
@@ -108,7 +108,7 @@
             <!-- Navigation -->
             <div class="text-center">
                 <button id="nextButton" class="glass-effect px-8 py-4 text-xl font-bold text-pink-500 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg group beating">
-                    <span class="inline-block transition-transform group-hover:translate-x-2">Birthday Note 💝</span>
+                    <span class="inline-block transition-transform group-hover:translate-x-2">Next Pookie Note 💝</span>
                 </button>
             </div>
 
@@ -125,22 +125,19 @@
             </button>
             <button id="playMusic" class="fixed bottom-4 right-4 bg-pink-500 text-white px-4 py-2 rounded-full shadow-lg text-sm">
     🎵 Play Music
-</button>
-
+            </button>
+            
         </div>
     </div>
-    
-    <script src="audio.js" defer></script>
-    
 
     <script>
         const notes = [
-           "Janamdin mubarak ho mere cute bug 🐞✨, tu meri life ka best feature hai jo kabhi crash nahi hota! 😘🎉",
+            "Janamdin mubarak ho mere cute bug 🐞✨, tu meri life ka best feature hai jo kabhi crash nahi hota! 😘🎉",
 "Happy Birthday, mere code ka perfect syntax! 💻❤️ Tere bina toh meri life ek endless loop ban jaye! 🔄🎂",
 "Oyeee, birthday baby! 🎈🎂 Tu meri zindagi ka premium subscription hai, jo lifetime valid hai! 😍✨",
 "Janamdin mubarak ho mere pyaare emoji 😍🎉, tu meri life ka wo GIF hai jo kabhi bore nahi karta! 🎊💖",
 "Happy B'day, mere heart ka bug fix 🛠️💓! Tere bina toh feelings hi error 404 ho jati hai! 🎂🥳"
-                 ];
+        ];
 
         const gifs = [
             "gif1.gif",
@@ -266,4 +263,16 @@
         // Handle next page button click
         document.getElementById('nextPageButton').addEventListener('click', () => {
             gsap.to('body', {
-                opacity
+                opacity: 0,
+                duration: 1,
+                onComplete: () => window.location.href = 'kiss.html'
+            });
+        });
+
+        // Initialize the page
+        initialize();
+    </script>
+    <script src="audio.js" defer></script>
+    
+</body>
+</html>
