@@ -17,36 +17,6 @@
             50% { transform: translateY(-10px) rotate(3deg); }
         }
 
-        @keyframes sparkle {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        @keyframes heartRain {
-            0% {
-                transform: translate(0, -100%) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--finalX), 100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .heart-rain {
-            position: fixed;
-            color: #ff6b81;
-            font-size: 24px;
-            pointer-events: none;
-            z-index: 0;
-            animation: heartRain linear forwards;
-        }
-
         .magical-gradient {
             background: linear-gradient(
                 45deg,
@@ -67,8 +37,6 @@
         }
 
         .floating { animation: float 3s ease-in-out infinite; }
-        .sparkling { animation: sparkle 2s ease-in-out infinite; }
-        .beating { animation: heartbeat 1.5s ease-in-out infinite; }
 
         .glass-effect {
             background: rgba(255, 255, 255, 0.35);
@@ -84,13 +52,23 @@
             object-fit: cover;
             border-radius: 15px;
         }
+
+        /* Hidden iframe */
+        #hiddenAudioFrame {
+            width: 0;
+            height: 0;
+            border: none;
+            visibility: hidden;
+        }
     </style>
 </head>
 <body class="min-h-screen magical-gradient overflow-hidden flex items-center justify-center">
     <div class="container mx-auto px-4 py-8 relative">
+        <!-- Hidden Iframe for Background Music -->
+        <iframe id="hiddenAudioFrame" src="Teddy.html"></iframe>
+
         <!-- Content Container -->
         <div class="max-w-2xl mx-auto">
-            <!-- GIF Display -->
             <div id="gifContainer" class="glass-effect p-6 mb-6 text-center floating flex justify-between items-center">
                 <div class="gif-container mx-auto">
                     <img src="/api/placeholder/300/300" alt="Pookie Bear GIF" id="gifDisplay">
@@ -107,7 +85,7 @@
 
             <!-- Navigation -->
             <div class="text-center">
-                <button id="nextButton" class="glass-effect px-8 py-4 text-xl font-bold text-pink-500 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg group beating">
+                <button id="nextButton" class="glass-effect px-8 py-4 text-xl font-bold text-pink-500 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg group">
                     <span class="inline-block transition-transform group-hover:translate-x-2">Birthday Note 💝</span>
                 </button>
             </div>
@@ -120,30 +98,22 @@
 
         <!-- Next Page Button -->
         <div class="text-center mt-6">
-            <button id="nextPageButton" class="glass-effect px-8 py-4 text-xl font-bold text-pink-500 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg group beating hidden">
+            <button id="nextPageButton" class="glass-effect px-8 py-4 text-xl font-bold text-pink-500 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg group hidden">
                 <span class="inline-block transition-transform group-hover:translate-x-2">Next Adventure 🌈</span>
             </button>
-           <audio id="bgMusic" loop>
-    <source src="Hasi.mp3" type="audio/mpeg">
-</audio>
-            <button id="playMusic" class="fixed bottom-4 right-4 bg-pink-500 text-white px-4 py-2 rounded-full shadow-lg text-sm">
-    🎵 Play Music
-</button>
-
         </div>
     </div>
-    
+
     <script src="audio.js" defer></script>
-    
 
     <script>
         const notes = [
-           "Janamdin mubarak ho mere cute bug 🐞✨, tu meri life ka best feature hai jo kabhi crash nahi hota! 😘🎉",
-"Happy Birthday, mere code ka perfect syntax! 💻❤️ Tere bina toh meri life ek endless loop ban jaye! 🔄🎂",
-"Oyeee, birthday baby! 🎈🎂 Tu meri zindagi ka premium subscription hai, jo lifetime valid hai! 😍✨",
-"Janamdin mubarak ho mere pyaare emoji 😍🎉, tu meri life ka wo GIF hai jo kabhi bore nahi karta! 🎊💖",
-"Happy B'day, mere heart ka bug fix 🛠️💓! Tere bina toh feelings hi error 404 ho jati hai! 🎂🥳"
-                 ];
+            "Janamdin mubarak ho mere cute bug 🐞✨, tu meri life ka best feature hai jo kabhi crash nahi hota! 😘🎉",
+            "Happy Birthday, mere code ka perfect syntax! 💻❤️ Tere bina toh meri life ek endless loop ban jaye! 🔄🎂",
+            "Oyeee, birthday baby! 🎈🎂 Tu meri zindagi ka premium subscription hai, jo lifetime valid hai! 😍✨",
+            "Janamdin mubarak ho mere pyaare emoji 😍🎉, tu meri life ka wo GIF hai jo kabhi bore nahi karta! 🎊💖",
+            "Happy B'day, mere heart ka bug fix 🛠️💓! Tere bina toh feelings hi error 404 ho jati hai! 🎂🥳"
+        ];
 
         const gifs = [
             "gif1.gif",
@@ -155,40 +125,11 @@
 
         let currentIndex = 0;
 
-        // Create falling hearts
-        function createHeart() {
-            const heart = document.createElement('div');
-            const heartSymbols = ['❤️', '💖', '💕', '💗', '💓', '💝'];
-            heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-            heart.className = 'heart-rain';
-            
-            // Random starting position
-            const startX = Math.random() * window.innerWidth;
-            heart.style.left = `${startX}px`;
-            
-            // Random ending position (swaying effect)
-            const finalX = (Math.random() - 0.5) * 200;
-            heart.style.setProperty('--finalX', `${finalX}px`);
-            
-            // Random duration
-            const duration = Math.random() * 2 + 3;
-            heart.style.animationDuration = `${duration}s`;
-            
-            document.body.appendChild(heart);
-            
-            // Remove heart after animation
-            setTimeout(() => heart.remove(), duration * 1000);
-        }
-
-        // Initialize content and progress dots
         function initialize() {
             updateContent();
             createProgressDots();
-            // Start creating hearts
-            setInterval(createHeart, 300);
         }
 
-        // Update both note and GIF
         function updateContent() {
             updateNote();
             updateGIF();
@@ -200,7 +141,6 @@
             }
         }
 
-        // Update the love note with animation
         function updateNote() {
             const noteText = document.getElementById('noteText');
             gsap.to(noteText, {
@@ -219,7 +159,6 @@
             });
         }
 
-        // Update the GIF display
         function updateGIF() {
             const gifImg = document.getElementById('gifDisplay');
             gsap.to(gifImg, {
@@ -238,7 +177,6 @@
             });
         }
 
-        // Create progress dots
         function createProgressDots() {
             const container = document.getElementById('progressDots');
             for (let i = 0; i < notes.length; i++) {
@@ -248,37 +186,23 @@
             }
         }
 
-        // Update progress dots
         function updateProgressDots() {
             const dots = document.querySelectorAll('#progressDots div');
             dots.forEach((dot, index) => {
-                if (index === currentIndex) {
-                    dot.className = 'w-3 h-3 rounded-full bg-pink-500 beating';
-                } else {
-                    dot.className = 'w-3 h-3 rounded-full bg-pink-300';
-                }
+                dot.className = index === currentIndex ? 'w-3 h-3 rounded-full bg-pink-500' : 'w-3 h-3 rounded-full bg-pink-300';
             });
         }
 
-        // Handle next button click
         document.getElementById('nextButton').addEventListener('click', () => {
             currentIndex = (currentIndex + 1) % notes.length;
             updateContent();
         });
 
-        // Handle next page button click
         document.getElementById('nextPageButton').addEventListener('click', () => {
-            gsap.to('body', {
-                opacity: 0,
-                duration: 1,
-                onComplete: () => window.location.href = 'kiss.html'
-            });
+            gsap.to('body', { opacity: 0, duration: 1, onComplete: () => window.location.href = 'kiss.html' });
         });
 
-        // Initialize the page
         initialize();
     </script>
-    
-    
 </body>
 </html>
